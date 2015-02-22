@@ -40,7 +40,7 @@ script:
   - export build_version=`bump current | awk '{print $3}'`
   - docker version
   - docker build -t local/blah:${build_version} blah
-  - bump patch
+  - bump patch --no-bundle --no-commit
 
 after_script:
   - git remote set-url --push origin https://github.com/Accordance/test-docker.git
