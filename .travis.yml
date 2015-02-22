@@ -45,6 +45,7 @@ script:
 after_script:
   - git remote set-url --push origin https://github.com/Accordance/test-docker.git
   - git remote -v
+  - git checkout master
   - git remote set-branches --add origin $TRAVIS_BRANCH
   - git fetch -q
   - git config user.name $GIT_NAME
