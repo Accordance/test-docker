@@ -6,6 +6,7 @@ env:
     - DOCKER_HOST=tcp://$HOST_IP:2375
     - DOCKER_PORT_RANGE=2400:2500
     - SLIRP_PORTS=$(seq 2375 2500)
+    - secure: "m0MlW+KNcV3WRlr8Ky+jGcqZTIynszN0a1zmz1oOpKxfgk8jtiUSAAWAOrjy+/Dq2+VenOTpXzxOqXLmjtRxIDf8QEe+Bt7d+l9h8VY2pFD+2g6XQJM2EK7gxujMPTSoBAX8L3D9/x8uaPb7r5pKJTx941eDXg7Lqbcwi/YBeDc="
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_b863493192de_key -iv $encrypted_b863493192de_iv -in .dockercfg.enc -out .dockercfg -d
@@ -27,8 +28,19 @@ before_script:
 
 script:
   - docker version
-  - docker build -t local/blah blah
+  # - docker build -t local/blah blah
   # - docker run local/r-base r -e 'sapply(installed.packages()[,"Package"], tools::testInstalledPackage)'
+  - echo "Test" > test.txt
 
-after_success:
-  - docker push accordance/test
+after_script:
+  - git config user.name '#{ENV['GIT_NAME']}'
+  - git config user.email '#{ENV['GIT_EMAIL']}'
+  - git config credential.helper "store --file=.git/credentials"
+  - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+  - git add test.txt
+  - git commit -m "Is it working?"
+  - git push origin master
+  - rm -f .git/credentials
+
+# after_success:
+  # - docker push accordance/test
