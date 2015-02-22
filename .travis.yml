@@ -1,4 +1,7 @@
-language: c
+language: ruby
+
+rvm:
+  - 2.1.3
 
 env:
   global:
@@ -14,20 +17,20 @@ branches:
 
 before_install:
   - openssl aes-256-cbc -K $encrypted_b863493192de_key -iv $encrypted_b863493192de_iv -in .dockercfg.enc -out .dockercfg -d
-  - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
-  - sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
-  - echo exit 101 | sudo tee /usr/sbin/policy-rc.d
-  - sudo chmod +x /usr/sbin/policy-rc.d
+  # - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
+  # - sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
+  # - echo exit 101 | sudo tee /usr/sbin/policy-rc.d
+  # - sudo chmod +x /usr/sbin/policy-rc.d
 
-install:
-  - sudo apt-get -qqy update
-  - sudo apt-get -qqy install lxc lxc-docker-1.2.0 slirp
-  - sudo sudo usermod -aG docker "$USER"
-  - git clone git://github.com/cptactionhank/sekexe
+# install:
+  # - sudo apt-get -qqy update
+  # - sudo apt-get -qqy install lxc lxc-docker-1.2.0 slirp
+  # - sudo sudo usermod -aG docker "$USER"
+  # - git clone git://github.com/cptactionhank/sekexe
 
-before_script:
-  - "sekexe/run 'mount -t tmpfs -o size=8g tmpfs /var/lib/docker && docker -d -H tcp://0.0.0.0:2375' &"
-  - "while ! docker info &> /dev/null ; do sleep 1; done"
+# before_script:
+#   - "sekexe/run 'mount -t tmpfs -o size=8g tmpfs /var/lib/docker && docker -d -H tcp://0.0.0.0:2375' &"
+#   - "while ! docker info &> /dev/null ; do sleep 1; done"
     #  - docker pull rocker/r-base
 
 script:
@@ -35,30 +38,28 @@ script:
   # - docker build -t local/blah blah
   # - docker run local/r-base r -e 'sapply(installed.packages()[,"Package"], tools::testInstalledPackage)'
   - echo "Test" > test.txt
-  - echo $TRAVIS_JOB_ID
-  - echo $TRAVIS_BUILD_NUMBER
-  - echo $TRAVIS_BRANCH
   - ls -la
-  - git remote -v
-  - git branch
+  # - git remote -v
+  # - git branch
+  - bump current | awk '{print $3}'
 
 after_script:
-  - git remote set-url --push origin https://github.com/Accordance/test-docker.git
+  # - git remote set-url --push origin https://github.com/Accordance/test-docker.git
   - git remote -v
-  - git checkout master
-  - git remote set-branches --add origin $TRAVIS_BRANCH
-  - git fetch -q
-  - git config user.name $GIT_NAME
-  - git config user.email $GIT_EMAIL
-  - git config credential.helper "store --file=.git/credentials"
-  - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
-  # - git branch $TRAVIS_BRANCH origin/$TRAVIS_BRANCH
-  - git add test.txt
-  - git status
-  - git commit -m "Is it working? build ${TRAVIS_BUILD_NUMBER} job ${TRAVIS_JOB_ID}"
-  - git remote -v
-  - git push -u origin master
-  - rm -f .git/credentials
+  # - git checkout master
+  # - git remote set-branches --add origin $TRAVIS_BRANCH
+  # - git fetch -q
+  # - git config user.name $GIT_NAME
+  # - git config user.email $GIT_EMAIL
+  # - git config credential.helper "store --file=.git/credentials"
+  # - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+  # # - git branch $TRAVIS_BRANCH origin/$TRAVIS_BRANCH
+  # - git add test.txt
+  # - git status
+  # - git commit -m "Is it working? build ${TRAVIS_BUILD_NUMBER} job ${TRAVIS_JOB_ID}"
+  # - git remote -v
+  # - git push -u origin master
+  # - rm -f .git/credentials
 
 # after_success:
   # - docker push accordance/test
