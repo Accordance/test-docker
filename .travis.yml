@@ -58,7 +58,7 @@ after_script:
   # # - git branch $TRAVIS_BRANCH origin/$TRAVIS_BRANCH
   - git add lib/version.rb
   # - git status
-  - git commit -m "Relasing new version build-${TRAVIS_BUILD_NUMBER} job-${TRAVIS_JOB_ID}"
+  - git commit -m "Relasing new version build-${TRAVIS_BUILD_NUMBER} job-${TRAVIS_JOB_ID} [skip ci]"
   # - git remote -v
   - git push -u origin master
   - rm -f .git/credentials
