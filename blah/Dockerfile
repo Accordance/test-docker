@@ -1,2 +1,2 @@
-FROM centos
+FROM scratch
 MAINTAINER "Igor Moochnick" igor@igroshare.com
