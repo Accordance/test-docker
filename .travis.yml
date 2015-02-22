@@ -39,7 +39,7 @@ script:
   - export build_version=`bump current | awk '{print $3}'`
   - docker version
   - echo "local/blah:${build_version}"
-  - docker build -t "local/blah:${build_version}" blah
+  - docker build -t "accordance/test:${build_version}" blah
   - docker images
   - docker push "accordance/test:${build_version}"
   - bump patch --no-bundle --no-commit
