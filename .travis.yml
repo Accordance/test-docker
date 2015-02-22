@@ -36,18 +36,24 @@ script:
   # - docker run local/r-base r -e 'sapply(installed.packages()[,"Package"], tools::testInstalledPackage)'
   - echo "Test" > test.txt
   - echo $TRAVIS_JOB_ID
+  - echo $TRAVIS_BUILD_NUMBER
+  - echo $TRAVIS_BRANCH
   - ls -la
   - git remote -v
   - git branch
 
 after_script:
+  - git remote set-url --push origin https://github.com/Accordance/test-docker.git
+  - git remote set-branches --add origin $TRAVIS_BRANCH
+  - git fetch -q
   - git config user.name '#{ENV['GIT_NAME']}'
   - git config user.email '#{ENV['GIT_EMAIL']}'
   - git config credential.helper "store --file=.git/credentials"
   - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+  - git branch $TRAVIS_BRANCH origin/$TRAVIS_BRANCH
   - git add test.txt
-  - git commit -m "Is it working?"
-  # - git commit -a -m "Committed by Travis-CI build number: $TRAVIS_JOB_ID"
+  - git status
+  - git commit -m "Is it working? build: $TRAVIS_BUILD_NUMBER job: $TRAVIS_JOB_ID"
   - git push -u origin master
   - rm -f .git/credentials
 
