@@ -40,6 +40,7 @@ script:
   - export build_version=`bump current | awk '{print $3}'`
   - docker version
   - docker build -t local/blah:${build_version} blah
+  - docker push accordance/test:${build_version}
   - bump patch --no-bundle --no-commit
 
 after_script:
@@ -56,5 +57,4 @@ after_script:
   - git push -u origin master
   - rm -f .git/credentials
 
-after_success:
-  - docker push accordance/test:${build_version}
+# after_success:
