@@ -36,7 +36,9 @@ script:
   # - docker run local/r-base r -e 'sapply(installed.packages()[,"Package"], tools::testInstalledPackage)'
   - echo "Test" > test.txt
   - echo $TRAVIS_JOB_ID
-  - env
+  - ls -la
+  - git remote -v
+  - git branch
 
 after_script:
   - git config user.name '#{ENV['GIT_NAME']}'
