@@ -8,6 +8,10 @@ env:
     - SLIRP_PORTS=$(seq 2375 2500)
     - secure: "m0MlW+KNcV3WRlr8Ky+jGcqZTIynszN0a1zmz1oOpKxfgk8jtiUSAAWAOrjy+/Dq2+VenOTpXzxOqXLmjtRxIDf8QEe+Bt7d+l9h8VY2pFD+2g6XQJM2EK7gxujMPTSoBAX8L3D9/x8uaPb7r5pKJTx941eDXg7Lqbcwi/YBeDc="
 
+branches:
+  only:
+    - master
+
 before_install:
   - openssl aes-256-cbc -K $encrypted_b863493192de_key -iv $encrypted_b863493192de_iv -in .dockercfg.enc -out .dockercfg -d
   - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
@@ -31,6 +35,8 @@ script:
   # - docker build -t local/blah blah
   # - docker run local/r-base r -e 'sapply(installed.packages()[,"Package"], tools::testInstalledPackage)'
   - echo "Test" > test.txt
+  - echo $TRAVIS_JOB_ID
+  - env
 
 after_script:
   - git config user.name '#{ENV['GIT_NAME']}'
@@ -39,7 +45,8 @@ after_script:
   - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
   - git add test.txt
   - git commit -m "Is it working?"
-  - git push origin master
+  # - git commit -a -m "Committed by Travis-CI build number: $TRAVIS_JOB_ID"
+  - git push -u origin master
   - rm -f .git/credentials
 
 # after_success:
