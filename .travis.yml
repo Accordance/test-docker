@@ -34,7 +34,7 @@ before_install:
     #  - docker pull rocker/r-base
 
 script:
-  - docker version
+  # - docker version
   # - docker build -t local/blah blah
   # - docker run local/r-base r -e 'sapply(installed.packages()[,"Package"], tools::testInstalledPackage)'
   - echo "Test" > test.txt
@@ -42,24 +42,26 @@ script:
   # - git remote -v
   # - git branch
   - bump current | awk '{print $3}'
+  - bump patch
+  - bump current | awk '{print $3}'
 
 after_script:
-  # - git remote set-url --push origin https://github.com/Accordance/test-docker.git
+  - git remote set-url --push origin https://github.com/Accordance/test-docker.git
   - git remote -v
-  # - git checkout master
+  - git checkout master
   # - git remote set-branches --add origin $TRAVIS_BRANCH
-  # - git fetch -q
-  # - git config user.name $GIT_NAME
-  # - git config user.email $GIT_EMAIL
-  # - git config credential.helper "store --file=.git/credentials"
-  # - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+  - git fetch -q
+  - git config user.name $GIT_NAME
+  - git config user.email $GIT_EMAIL
+  - git config credential.helper "store --file=.git/credentials"
+  - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
   # # - git branch $TRAVIS_BRANCH origin/$TRAVIS_BRANCH
-  # - git add test.txt
+  - git add lib/version.rb
   # - git status
-  # - git commit -m "Is it working? build ${TRAVIS_BUILD_NUMBER} job ${TRAVIS_JOB_ID}"
+  - git commit -m "Relasing new version build-${TRAVIS_BUILD_NUMBER} job-${TRAVIS_JOB_ID}"
   # - git remote -v
-  # - git push -u origin master
-  # - rm -f .git/credentials
+  - git push -u origin master
+  - rm -f .git/credentials
 
 # after_success:
   # - docker push accordance/test
