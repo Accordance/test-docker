@@ -36,15 +36,16 @@ before_script:
 
 script:
   # - docker run local/r-base r -e 'sapply(installed.packages()[,"Package"], tools::testInstalledPackage)'
-  - ls -la
   - export build_version=`bump current | awk '{print $3}'`
   - docker version
   - echo "local/blah:${build_version}"
-  - docker build -t local/blah:${build_version} blah
-  - docker push accordance/test:${build_version}
+  - docker build -t "local/blah:${build_version}" blah
+  - docker images
+  - docker push "accordance/test:${build_version}"
   - bump patch --no-bundle --no-commit
 
-after_script:
+# after_script:
+after_success:
   - git remote set-url --push origin https://github.com/Accordance/test-docker.git
   - git remote -v
   - git checkout master
@@ -57,5 +58,3 @@ after_script:
   - git commit -m "Relasing new version build:${TRAVIS_BUILD_NUMBER} job:${TRAVIS_JOB_ID} [skip ci]"
   - git push -u origin master
   - rm -f .git/credentials
-
-# after_success:
